@@ -2,7 +2,10 @@ package afterglow.mapping;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -16,11 +19,11 @@ import javax.swing.SwingConstants;
 
 public class GeneralTab extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JTextField pathText, vmfText;
 	private JFileChooser fc = new JFileChooser();
 	private JButton pathBrowse;
-	//private static Path dir;
+	private static JTextField pathText, vmfText;
 	
+	// Setting up the GUI...
 	public GeneralTab() {
 		JLabel pathLabel = new JLabel("Path:");
 		pathLabel.setFont(new Font("Century Gothic", Font.PLAIN, 16));
@@ -29,7 +32,6 @@ public class GeneralTab extends JPanel implements ActionListener {
 		pathText.setFont(new Font("Century Gothic", Font.PLAIN, 16));
 		pathText.setColumns(10);
 		
-		// Browse button for directory of vmfs
 		pathBrowse = new JButton("Browse...");
 		pathBrowse.setFont(new Font("Century Gothic", Font.PLAIN, 13));
 		pathBrowse.addActionListener(this);
@@ -108,8 +110,24 @@ public class GeneralTab extends JPanel implements ActionListener {
 		        pathText.setText(file.getAbsolutePath());
 		    }
 		}
+	}
 		
-//		else if (e.getSource() == vmfBrowse) {
+	public static void save(PrintWriter out) { 
+		out.println(pathText.getText());
+		out.println(vmfText.getText());
+	}
+	
+	public static void load(BufferedReader br) {
+		try {
+			pathText.setText(br.readLine());
+			vmfText.setText(br.readLine());
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+			
+///		else if (e.getSource() == vmfBrowse) {
 //			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 //			dir = Paths.get(pathText.getText());
 //			if (pathText.getText().equals(""))
@@ -127,5 +145,4 @@ public class GeneralTab extends JPanel implements ActionListener {
 //			    }
 //			}
 //		}
-	}
 }
