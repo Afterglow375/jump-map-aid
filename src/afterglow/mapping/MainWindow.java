@@ -63,6 +63,7 @@ public class MainWindow implements ActionListener {
 		
 		frmJumpMapAid.getContentPane().add(tabbedPane);
 		tabbedPane.addTab("General", new GeneralTab());
+		tabbedPane.addTab("Alter", new AlterTab());
 		
 		settings = new JButton("Save Settings");
 		settings.setToolTipText("Saves the current settings");
@@ -103,7 +104,6 @@ public class MainWindow implements ActionListener {
 		else if (e.getSource() == output) { // Copy input vmf, alter it based on user settings, output new vmf
 			
 		}
-		
 		else if (e.getSource() == merge) { // Overwrite input vmf with output
 			
 		}
@@ -120,6 +120,7 @@ public class MainWindow implements ActionListener {
 			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("settings.txt")));
 	        out.println("WARNING: ALTERING THIS FILE IN ANY WAY MAY MAKE THE APP FAIL");
 	        GeneralTab.save(out);
+	        AlterTab.save(out);
 	        out.close();
 	        Toast.makeText(frmJumpMapAid, "Settings saved", Style.NORMAL).display();
 		}
@@ -134,6 +135,7 @@ public class MainWindow implements ActionListener {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			br.readLine();
 			GeneralTab.load(br);
+			AlterTab.load(br);
 			br.close();
 		}
 		catch (IOException e) {
