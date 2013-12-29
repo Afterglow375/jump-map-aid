@@ -17,7 +17,7 @@ import javax.swing.SwingConstants;
 
 public class GeneralTab extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private JFileChooser fc = new JFileChooser();
+	private JFileChooser fc;
 	private JButton pathBrowse;
 	private static JTextField pathText, vmfText;
 	
@@ -77,11 +77,13 @@ public class GeneralTab extends JPanel implements ActionListener {
 		add(pathBrowse);
 		add(desc);
 		add(separator);
+		
+		fc = new JFileChooser();
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == pathBrowse) {
-			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = fc.showOpenDialog(this);
 		    if (returnVal == JFileChooser.APPROVE_OPTION) {
 		        File file = fc.getSelectedFile();
@@ -106,6 +108,20 @@ public class GeneralTab extends JPanel implements ActionListener {
 			e.printStackTrace();
 		}
 	}
+	
+	public static String getPath() {
+		return pathText.getText() + "\\" + vmfText.getText() + ".vmf";
+	}
+	
+	public static String getPathText() {
+		return pathText.getText();
+	}
+	
+	public static String getVmfText() {
+		return vmfText.getText();
+	}
+	
+
 			
 ///		else if (e.getSource() == vmfBrowse) {
 //			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);

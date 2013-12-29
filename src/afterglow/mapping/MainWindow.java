@@ -90,6 +90,8 @@ public class MainWindow implements ActionListener {
 		frmJumpMapAid.setBounds(100, 100, 700, 550);
 		frmJumpMapAid.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		Internalize.createLog();
+		
 		// Populate fields based on settings.txt, if it exists
 		File data = new File(System.getProperty("user.dir") + "\\settings.txt");
 		if (data.isFile()) {
@@ -102,12 +104,18 @@ public class MainWindow implements ActionListener {
 			save();
 		}
 		else if (e.getSource() == output) { // Copy input vmf, alter it based on user settings, output new vmf
-			
+			Internalize.parse();
 		}
 		else if (e.getSource() == merge) { // Overwrite input vmf with output
 			
 		}
 	}
+	
+	// Create the log window
+//	public JFrame createLog() { 
+//		JFrame log = new JFrame();
+//		return log;
+//	}
 	
 	// Popup dialog box
 	public static void popupBox(String infoMessage, String location, int option) {
@@ -139,7 +147,7 @@ public class MainWindow implements ActionListener {
 			br.close();
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			e.printStackTrace();	
 		}
 	}
 }
