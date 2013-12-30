@@ -51,7 +51,7 @@ public class GeneralTab extends JPanel implements ActionListener {
 		pathDesc.setBounds(30, 85, 330, 21);
 		pathDesc.setFont(new Font("Century Gothic", Font.PLAIN, 16));
 		
-		JLabel vmfDesc = new JLabel("Enter the name of your jump map.");
+		JLabel vmfDesc = new JLabel("Enter the name of your map.");
 		vmfDesc.setBounds(30, 166, 278, 21);
 		vmfDesc.setFont(new Font("Century Gothic", Font.PLAIN, 16));
 		
