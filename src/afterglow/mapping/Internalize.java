@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -16,14 +17,12 @@ import javax.swing.JTextArea;
 
 public class Internalize {
 	private static JFrame frame;
-	private static JTextArea log;
 	private static String pathText, vmfText;
 	private static Path dir;
 	private static String seperator;
-	public static ArrayList<String> lines; // ArrayList of entire vmf
-	public static ArrayList<Integer> worldBrushes; // Indices where non-hidden world brushes are in the vmf
-	public static ArrayList<Integer> entities; // Indices where non-hidden brush entities are in the vmf
-	public static ArrayList<Integer> ids; // All the ids in the vmf, needed to generate unique ids
+	public static JTextArea log;
+	public static ArrayList<String> lines, brush; // ArrayList of entire vmf
+	public static ArrayList<Integer> groupIds; // Keeping track of the group ids to prevent conflicing id values
 	
 	// Creates the log for the output button
 	public static void createLog() {
@@ -44,7 +43,7 @@ public class Internalize {
 		pathText = GeneralTab.getPathText();
 		vmfText = GeneralTab.getVmfText();
 		dir = Paths.get(GeneralTab.getPath());
-		if (Files.notExists(Paths.get(pathText))) {
+		if (Files.notExists(Paths.get(pathText))) { // Check to make sure vmf is valid
 			MainWindow.popupBox("Invalid filepath.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		else if (Files.notExists(dir)) {
@@ -56,42 +55,106 @@ public class Internalize {
 			log.append("Reading from " + dir.toString() + '\n');
 			log.append(seperator);
 			lines = new ArrayList<String>();
-			worldBrushes = new ArrayList<Integer>();
-			entities = new ArrayList<Integer>();
-			ids = new ArrayList<Integer>();
+			brush = new ArrayList<String>(25);
+			groupIds = new ArrayList<Integer>();
+			String[] splitLine;
+			int solidIndicator = 0;
+			int entityIndicator = 0;
+			int pointEntityIndicator = 1;
+			int groupIndicator = 0;
+			int id = 0;
+			String idSubstring;
 			
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(dir.toString()));
 				String line = br.readLine();
-				int entityIndicator = 0;
+
 				while(line != null) {
 					if (line.equals("entity")) {
-						entities.add(lines.size());
+						groupIndicator = 0;
 						entityIndicator = 1;
 					}
-					else if (line.contains("\"id\"")) {
-						log.append(line + '\n');
+					else if (line.equals("\tgroup") && entityIndicator == 0) {
+						groupIndicator = 1;
+					}
+					else if (line.equals("\tsolid") && entityIndicator == 0) {
+						solidIndicator = 1;
+					}
+					else if (line.contains("\"id\"")) { // Giving a unique id
+						if (groupIndicator == 1) {
+							splitLine = line.split(" ");
+							idSubstring = splitLine[1].substring(1, splitLine[1].length()-1);
+							groupIds.add(Integer.parseInt(idSubstring));
+						}
+						else {
+							id = generateUniqueId(id);
+							splitLine = line.split(" ");
+							line = splitLine[0] + " \"" + Integer.toString(id) + '\"';
+						}
+					}
+					
+					if (solidIndicator == 1) {
+						if (line.equals("}")) { // End of this brush
+							solidIndicator = 0;
+							lines.addAll(brush);
+							lines.add(line);
+							brush.clear();
+						}
+						else {
+							brush.add(line);
+						}
 					}
 					else if (entityIndicator == 1) {
-						if (line.equals("\tsolid")) { // Brush entity to keep track of
+//						if (line.equals("\tsolid")) { // Brush entity to keep track of
+//							pointEntityIndicator = 0;
+//						}
+//						else if (line.equals("\teditor") && pointEntityIndicator == 1) { // Point entity, so stop keeping track of
+//							
+//						}
+						if (line.equals("}")) { // End of this entity
 							entityIndicator = 0;
+							lines.addAll(brush);
+							lines.add(line);
+							brush.clear();
 						}
-						else if (line.equals("\teditor")) { // Point entity so remove from list
-							entityIndicator = 0;
-							entities.remove(entities.size()-1);
+						else {
+							brush.add(line);
 						}
 					}
-				    lines.add(line);
+					else {
+						lines.add(line);
+					}
 				    line = br.readLine();
 				}
-				for (int entityIndex : entities) {
-					log.append(Integer.toString(entityIndex) + '\n');
-				}
+//				for (String linea : lines) {
+//					log.append(linea + '\n');
+//				}
 				br.close();
 			}
 			catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	// Output button
+//	private static void output() {
+//		
+//		for (int entityIndex : Internalize.ids) {
+//			Internalize.log.append(Integer.toString(entityIndex) + '\n');
+//		}
+//		Internalize.log.append(Integer.toString(Internalize.generateUniqueId(7)) + '\n');
+//		for (int entityIndex : Internalize.ids) {
+//			Internalize.log.append(Integer.toString(entityIndex) + '\n');
+//		}
+//	}
+	
+	// Generates unique id, since all ids in a vmf must be unique
+	public static int generateUniqueId(int id) {
+		id++;
+		while (groupIds.contains(id)) {
+			id++;
+		}
+		return id;
 	}
 }

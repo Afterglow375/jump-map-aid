@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 
 public class AlterTab extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static JTextField playerClipText, triggerTeleportHeight, triggerTeleportText,
+	public static JTextField playerClipText, triggerTeleportHeight, triggerTeleportText,
 	noGrenadesText, noGrenadesHeight, brushText;
 	
 	// Setting up the Alter tab GUI...
