@@ -1,3 +1,6 @@
 jump-map-aid
 ============
-A Java app made with Swing and the WindowBuilder Pro plugin in Eclipse to automate certain jump mapping tasks.
+A Java application made with Swing and the WindowBuilder Pro plugin in Eclipse to automate certain mapping tasks for Valve's Hammer Editor.
+
+
+Currently in the early stages of development.

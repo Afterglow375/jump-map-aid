@@ -20,9 +20,10 @@ public class Internalize {
 	private static String pathText, vmfText;
 	private static Path dir;
 	private static String seperator;
+	private static ArrayList<String> lines, brush; // ArrayList of entire vmf
+	private static ArrayList<Integer> groupIds, sideIndices; // Keeping track of the group ids to prevent conflicing id values
+	private static int id = 0;
 	public static JTextArea log;
-	public static ArrayList<String> lines, brush; // ArrayList of entire vmf
-	public static ArrayList<Integer> groupIds; // Keeping track of the group ids to prevent conflicing id values
 	
 	// Creates the log for the output button
 	public static void createLog() {
@@ -38,7 +39,7 @@ public class Internalize {
 		frame.getContentPane().add(logScrollPane);
 	}
 	
-	// Reads through entire vmf, writes each line to an arraylist, keeps track of where non-hidden brushes are
+	// Reads through entire vmf, carrying out actions based on user settings
 	public static void parse() { 
 		pathText = GeneralTab.getPathText();
 		vmfText = GeneralTab.getVmfText();
@@ -57,47 +58,68 @@ public class Internalize {
 			lines = new ArrayList<String>();
 			brush = new ArrayList<String>(25);
 			groupIds = new ArrayList<Integer>();
+			sideIndices = new ArrayList<Integer>();
 			String[] splitLine;
 			int solidIndicator = 0;
 			int entityIndicator = 0;
 			int pointEntityIndicator = 1;
 			int groupIndicator = 0;
-			int id = 0;
-			String idSubstring;
+			int alterTabIndicator = 0;
+			int displacementIndicator = 0;
+			String idSubstring, texture;
+			ArrayList<String> alterTabData = AlterTab.updatedData();
 			
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(dir.toString()));
 				String line = br.readLine();
-
-				while(line != null) {
-					if (line.equals("entity")) {
-						groupIndicator = 0;
-						entityIndicator = 1;
-					}
-					else if (line.equals("\tgroup") && entityIndicator == 0) {
-						groupIndicator = 1;
-					}
-					else if (line.equals("\tsolid") && entityIndicator == 0) {
-						solidIndicator = 1;
-					}
-					else if (line.contains("\"id\"")) { // Giving a unique id
+				
+				// Handling the contents of the vmf...
+				while (line != null) { 
+					if (line.contains("\"id\"")) { // Giving a unique id
 						if (groupIndicator == 1) {
 							splitLine = line.split(" ");
 							idSubstring = splitLine[1].substring(1, splitLine[1].length()-1);
 							groupIds.add(Integer.parseInt(idSubstring));
 						}
 						else {
-							id = generateUniqueId(id);
+							id = generateUniqueId();
 							splitLine = line.split(" ");
 							line = splitLine[0] + " \"" + Integer.toString(id) + '\"';
 						}
 					}
+					else if (line.contains("material")) {
+						splitLine = line.split(" ");
+						texture = splitLine[1].substring(1, splitLine[1].length()-1);
+						if (alterTabData.contains(texture)) {
+							alterTabIndicator = 1;
+						}
+					}
+					else if (line.equals("\tsolid") && entityIndicator == 0) {
+						solidIndicator = 1;
+						displacementIndicator = 0;
+					}
+					else if (line.equals("entity")) {
+						groupIndicator = 0;
+						entityIndicator = 1;
+					}
+					else if (line.equals("\tgroup") && entityIndicator == 0) {
+						groupIndicator = 1;
+					}
 					
 					if (solidIndicator == 1) {
-						if (line.equals("}")) { // End of this brush
+						if (line.contains("side")) {
+							sideIndices.add(brush.size());
+						}
+						else if (line.contains("dispinfo")) {
+							displacementIndicator = 1;
+						}
+						else if (line.equals("}")) { // End of this brush
+							brush.add(line);
+							if (alterTabIndicator == 1 && displacementIndicator == 0) { // Only change world brushes that aren't displacements
+								brush = AlterTab.changeBrush(brush, sideIndices);		// and have a texture that matches the user settings in the Alter tab
+							}
 							solidIndicator = 0;
 							lines.addAll(brush);
-							lines.add(line);
 							brush.clear();
 						}
 						else {
@@ -112,16 +134,16 @@ public class Internalize {
 //							
 //						}
 						if (line.equals("}")) { // End of this entity
+							brush.add(line);
 							entityIndicator = 0;
 							lines.addAll(brush);
-							lines.add(line);
 							brush.clear();
 						}
 						else {
 							brush.add(line);
 						}
 					}
-					else {
+					else { 
 						lines.add(line);
 					}
 				    line = br.readLine();
@@ -150,7 +172,7 @@ public class Internalize {
 //	}
 	
 	// Generates unique id, since all ids in a vmf must be unique
-	public static int generateUniqueId(int id) {
+	public static int generateUniqueId() {
 		id++;
 		while (groupIds.contains(id)) {
 			id++;

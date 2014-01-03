@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,8 +14,9 @@ import javax.swing.SwingConstants;
 
 public class AlterTab extends JPanel {
 	private static final long serialVersionUID = 1L;
-	public static JTextField playerClipText, triggerTeleportHeight, triggerTeleportText,
+	private static JTextField playerClipText, triggerTeleportHeight, triggerTeleportText,
 	noGrenadesText, noGrenadesHeight, brushText;
+	private static ArrayList<String> data = new ArrayList<String>(6);
 	
 	// Setting up the Alter tab GUI...
 	public AlterTab() {
@@ -126,5 +128,62 @@ public class AlterTab extends JPanel {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static ArrayList<String> changeBrush(ArrayList<String> brush, ArrayList<Integer> indices) {
+		VMFObjectCreator creator = new VMFObjectCreator(brush, indices);
+		for (int i = 0; i < indices.size(); i++) {
+			if (brush.get(indices.get(i) + 3).contains(playerClipText.getText().toUpperCase())) {
+				Internalize.log.append(brush.get(indices.get(i) + 3) + '\n');
+				Internalize.log.append(playerClipText.getText().toUpperCase() + '\n');
+				// turn this into a playerclip block and func_illusionary, grouped
+			}
+			else if (brush.get(indices.get(i) + 3).contains(brushText.getText().toUpperCase())) {
+				creator.createFuncBrush();
+				// turn this into a func_brush
+			}
+			if (brush.get(indices.get(i) + 3).contains(triggerTeleportText.getText().toUpperCase())) {
+				// turn this into a playerclip block and func_illusionary, grouped
+			}
+			if (brush.get(indices.get(i) + 3).contains(noGrenadesText.getText().toUpperCase())) {
+				// turn this into a playerclip block and func_illusionary, grouped
+			}
+		}
+		return brush;
+	}
+	
+	public static ArrayList<String> updatedData() {
+		data.add(playerClipText.getText().toUpperCase());
+		data.add(brushText.getText().toUpperCase());
+		data.add(triggerTeleportText.getText().toUpperCase());
+		data.add(triggerTeleportHeight.getText().toUpperCase());
+		data.add(playerClipText.getText().toUpperCase());
+		data.add(noGrenadesHeight.getText().toUpperCase());
+		return data;
+	}
+	
+	// Getters
+	public static String getPlayerClipText() {
+		return playerClipText.getText();
+	}
+	
+	public static String getBrushText() {
+		return brushText.getText();
+	}
+	
+	public static String getTriggerTeleportText() {
+		return triggerTeleportText.getText();
+	}
+	
+	public static String getTriggerTeleportHeight() {
+		return triggerTeleportHeight.getText();
+	}
+	
+	public static String getNoGrenadesText() {
+		return noGrenadesText.getText();
+	}
+	
+	public static String getNoGrenadesHeight() {
+		return noGrenadesHeight.getText();
 	}
 }
