@@ -67,14 +67,13 @@ public class Internalize {
 			int alterTabIndicator = 0;
 			int displacementIndicator = 0;
 			String idSubstring, texture;
-			ArrayList<String> alterTabData = AlterTab.updatedData();
 			
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(dir.toString()));
 				String line = br.readLine();
 				
 				// Handling the contents of the vmf...
-				while (line != null) { 
+				while (line != null) { //REPLACE WITH SWITCH
 					if (line.contains("\"id\"")) { // Giving a unique id
 						if (groupIndicator == 1) {
 							splitLine = line.split(" ");
@@ -90,7 +89,10 @@ public class Internalize {
 					else if (line.contains("material")) {
 						splitLine = line.split(" ");
 						texture = splitLine[1].substring(1, splitLine[1].length()-1);
-						if (alterTabData.contains(texture)) {
+						if (AlterTab.getPlayerClipText().toUpperCase().equals(texture) || 
+						AlterTab.getBrushText().toUpperCase().equals(texture) ||
+						AlterTab.getTriggerTeleportText().toUpperCase().equals(texture) ||
+						AlterTab.getNoGrenadesText().toUpperCase().equals(texture)) {
 							alterTabIndicator = 1;
 						}
 					}
@@ -113,7 +115,7 @@ public class Internalize {
 						else if (line.contains("dispinfo")) {
 							displacementIndicator = 1;
 						}
-						else if (line.equals("}")) { // End of this brush
+						else if (line.equals("\t}")) { // End of this brush
 							brush.add(line);
 							if (alterTabIndicator == 1 && displacementIndicator == 0) { // Only change world brushes that aren't displacements
 								brush = AlterTab.changeBrush(brush, sideIndices);		// and have a texture that matches the user settings in the Alter tab

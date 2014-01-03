@@ -16,7 +16,6 @@ public class AlterTab extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static JTextField playerClipText, triggerTeleportHeight, triggerTeleportText,
 	noGrenadesText, noGrenadesHeight, brushText;
-	private static ArrayList<String> data = new ArrayList<String>(6);
 	
 	// Setting up the Alter tab GUI...
 	public AlterTab() {
@@ -132,34 +131,33 @@ public class AlterTab extends JPanel {
 	
 	public static ArrayList<String> changeBrush(ArrayList<String> brush, ArrayList<Integer> indices) {
 		VMFObjectCreator creator = new VMFObjectCreator(brush, indices);
+		String[] splitLine;
+		String texture;
+		int indicator = 0; // Want playerClip/funcBrush creators to be called only once per brush
 		for (int i = 0; i < indices.size(); i++) {
-			if (brush.get(indices.get(i) + 3).contains(playerClipText.getText().toUpperCase())) {
-				Internalize.log.append(brush.get(indices.get(i) + 3) + '\n');
-				Internalize.log.append(playerClipText.getText().toUpperCase() + '\n');
-				// turn this into a playerclip block and func_illusionary, grouped
+			splitLine = brush.get(indices.get(i) + 3).split(" ");
+			texture = splitLine[1].substring(1, splitLine[1].length()-1);
+			
+			// Turn this into a playerclip block and func_illusionary, grouped
+			if (texture.equals(playerClipText.getText().toUpperCase()) && indicator == 0) { 
+//				Internalize.log.append(brush.get(indices.get(i) + 3) + '\n');
+//				Internalize.log.append(playerClipText.getText().toUpperCase() + '\n');
+				indicator = 1;
 			}
-			else if (brush.get(indices.get(i) + 3).contains(brushText.getText().toUpperCase())) {
+			// Turn this into a func_brush
+			else if (texture.equals(brushText.getText().toUpperCase()) && indicator == 0) { 
 				creator.createFuncBrush();
-				// turn this into a func_brush
+				indicator = 1;
 			}
+			
+			// Turn all sides that have a given texture to have teleports above them
 			if (brush.get(indices.get(i) + 3).contains(triggerTeleportText.getText().toUpperCase())) {
-				// turn this into a playerclip block and func_illusionary, grouped
 			}
+			// Turn all sides that have a given texture to have func_nogrenades above them
 			if (brush.get(indices.get(i) + 3).contains(noGrenadesText.getText().toUpperCase())) {
-				// turn this into a playerclip block and func_illusionary, grouped
 			}
 		}
 		return brush;
-	}
-	
-	public static ArrayList<String> updatedData() {
-		data.add(playerClipText.getText().toUpperCase());
-		data.add(brushText.getText().toUpperCase());
-		data.add(triggerTeleportText.getText().toUpperCase());
-		data.add(triggerTeleportHeight.getText().toUpperCase());
-		data.add(playerClipText.getText().toUpperCase());
-		data.add(noGrenadesHeight.getText().toUpperCase());
-		return data;
 	}
 	
 	// Getters
