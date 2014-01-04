@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 // This class transforms existing brushes into other aspects of VMF files - solids, groups, entities
 public class VMFObjectCreator {
-	private static int funcBrushCounter = 0;
 	private static int playerClipCounter = 0;
+	private static int funcBrushCounter = 0;
 	private static int triggerTeleportCounter = 0;
 	private static int noGrenadesCounter = 0;
 	private ArrayList<String> brush;
@@ -123,7 +123,7 @@ public class VMFObjectCreator {
 		String playerClip = "";
 		for (String line : brush) {
 			if (line.contains("\"material\"")) {
-				illusionary += line + '\n';
+				illusionary += line + "\n";
 				playerClip += "\t\t\t\"material\" \"TOOLS/TOOLSPLAYERCLIP\"\n"; // Replace textures with player clip
 			}
 			else if (line.contains("\t\t\"id\"")) {
@@ -138,11 +138,11 @@ public class VMFObjectCreator {
 			}
 			else if (line.contains("\"visgroupshown\"")) {
 				playerClip += "\t\t\t\"groupid\" \"" + groupId + "\"\n";
-				playerClip += line + '\n';
+				playerClip += line + "\n";
 			}
 			else {
-				playerClip += line + '\n';
-				illusionary += line + '\n';
+				playerClip += line + "\n";
+				illusionary += line + "\n";
 			}
 		}
 		illusionary +=
@@ -156,6 +156,7 @@ public class VMFObjectCreator {
 		+ "\t\t\"logicalpos\" \"[0, 1000]\"\n"
 		+ "\t}\n"
 		+ "}";
+		playerClipCounter++;
 		outputEntities.add(illusionary);
 		outputBrushesAndGroups.add(0, playerClip.substring(0, playerClip.length()-1));
 	}
@@ -181,7 +182,7 @@ public class VMFObjectCreator {
 		+ "\t\"StartDisabled\" \"0\"\n"
 		+ "\t\"vrad_brush_cast_shadows\" \"0\"\n";
 		for (String line : brush) {
-			funcBrush += line + '\n';
+			funcBrush += line + "\n";
 		}
 		funcBrush +=
 		"\teditor\n"
@@ -196,5 +197,22 @@ public class VMFObjectCreator {
 		
 		funcBrushCounter++;
 		outputEntities.add(funcBrush);
+	}
+	
+	// Getters
+	public static int getPlayerClipCounter() {
+		return playerClipCounter;
+	}
+	
+	public static int getFuncBrushCounter() {
+		return funcBrushCounter;
+	}
+	
+	public static int getTriggerTeleportCounter() {
+		return triggerTeleportCounter;
+	}
+	
+	public static int getNoGrenadesCounter() {
+		return noGrenadesCounter;
 	}
 }

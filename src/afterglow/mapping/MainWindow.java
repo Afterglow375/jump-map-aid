@@ -104,7 +104,7 @@ public class MainWindow implements ActionListener {
 			save();
 		}
 		else if (e.getSource() == output) { // Copy input vmf, alter it based on user settings, output new vmf
-			Internalize.parse();
+			Internalize.ensureProperInput();
 		}
 		else if (e.getSource() == merge) { // Overwrite input vmf with output
 			
