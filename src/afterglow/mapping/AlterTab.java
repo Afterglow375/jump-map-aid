@@ -134,19 +134,16 @@ public class AlterTab extends JPanel {
 		String[] splitLine;
 		String texture;
 		int indicator = 0; // Want playerClip/funcBrush creators to be called only once per brush
+		
 		for (int i = 0; i < indices.size(); i++) {
 			splitLine = brush.get(indices.get(i) + 3).split(" ");
 			texture = splitLine[1].substring(1, splitLine[1].length()-1);
-			
-			// Turn this into a playerclip block and func_illusionary, grouped
-			if (texture.equals(playerClipText.getText().toUpperCase()) && indicator == 0) { 
-//				Internalize.log.append(brush.get(indices.get(i) + 3) + '\n');
-//				Internalize.log.append(playerClipText.getText().toUpperCase() + '\n');
+			if (indicator == 0 && texture.equals(playerClipText.getText().toUpperCase())) { 
+				creator.createPlayerClip(); // Turn this into a playerclip block and func_illusionary, grouped
 				indicator = 1;
 			}
-			// Turn this into a func_brush
-			else if (texture.equals(brushText.getText().toUpperCase()) && indicator == 0) { 
-				creator.createFuncBrush();
+			else if (indicator == 0 && texture.equals(brushText.getText().toUpperCase())) { 
+				creator.createFuncBrush(); // Turn this into a func_brush
 				indicator = 1;
 			}
 			

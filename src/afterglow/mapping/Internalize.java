@@ -16,10 +16,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class Internalize {
+	private static final String SEPARATOR = "==========================================================================";
 	private static JFrame frame;
 	private static String pathText, vmfText;
 	private static Path dir;
-	private static String seperator;
 	private static ArrayList<String> lines, brush; // ArrayList of entire vmf
 	private static ArrayList<Integer> groupIds, sideIndices; // Keeping track of the group ids to prevent conflicing id values
 	private static int id = 0;
@@ -27,7 +27,6 @@ public class Internalize {
 	
 	// Creates the log for the output button
 	public static void createLog() {
-		seperator = "===========================================================\n";
 		log = new JTextArea();
 		log.setMargin(new Insets(5,5,5,5));
         log.setEditable(false);
@@ -54,7 +53,7 @@ public class Internalize {
 			log.setText("");
 			frame.setVisible(true);
 			log.append("Reading from " + dir.toString() + '\n');
-			log.append(seperator);
+			log.append(SEPARATOR + '\n');
 			lines = new ArrayList<String>();
 			brush = new ArrayList<String>(25);
 			groupIds = new ArrayList<Integer>();
@@ -73,7 +72,7 @@ public class Internalize {
 				String line = br.readLine();
 				
 				// Handling the contents of the vmf...
-				while (line != null) { //REPLACE WITH SWITCH
+				while (line != null) { 
 					if (line.contains("\"id\"")) { // Giving a unique id
 						if (groupIndicator == 1) {
 							splitLine = line.split(" ");
@@ -98,7 +97,8 @@ public class Internalize {
 					}
 					else if (line.equals("\tsolid") && entityIndicator == 0) {
 						solidIndicator = 1;
-						displacementIndicator = 0;
+						displacementIndicator = 0; // Reset displacement and alter tab indicators
+						alterTabIndicator = 0; 
 					}
 					else if (line.equals("entity")) {
 						groupIndicator = 0;
@@ -106,10 +106,17 @@ public class Internalize {
 					}
 					else if (line.equals("\tgroup") && entityIndicator == 0) {
 						groupIndicator = 1;
+						addGeneratedSolidsAndGroups();
+					}
+					else if (line.equals("cameras")) {
+						groupIndicator = 0;
+						addGeneratedSolidsAndGroups();
+						addGeneratedEntities();
 					}
 					
 					if (solidIndicator == 1) {
 						if (line.contains("side")) {
+							brush.add(line);
 							sideIndices.add(brush.size());
 						}
 						else if (line.contains("dispinfo")) {
@@ -118,17 +125,22 @@ public class Internalize {
 						else if (line.equals("\t}")) { // End of this brush
 							brush.add(line);
 							if (alterTabIndicator == 1 && displacementIndicator == 0) { // Only change world brushes that aren't displacements
-								brush = AlterTab.changeBrush(brush, sideIndices);		// and have a texture that matches the user settings in the Alter tab
+								AlterTab.changeBrush(brush, sideIndices);		// and have a texture that matches the user settings in the Alter tab
+							}
+							else {
+								lines.addAll(brush);
 							}
 							solidIndicator = 0;
-							lines.addAll(brush);
 							brush.clear();
+							sideIndices.clear();
 						}
 						else {
 							brush.add(line);
 						}
 					}
 					else if (entityIndicator == 1) {
+						addGeneratedSolidsAndGroups();
+						addGeneratedEntities();
 //						if (line.equals("\tsolid")) { // Brush entity to keep track of
 //							pointEntityIndicator = 0;
 //						}
@@ -150,9 +162,9 @@ public class Internalize {
 					}
 				    line = br.readLine();
 				}
-//				for (String linea : lines) {
-//					log.append(linea + '\n');
-//				}
+				for (String linea : lines) {
+					log.append(linea + '\n');
+				}
 				br.close();
 			}
 			catch (IOException e) {
@@ -160,6 +172,31 @@ public class Internalize {
 			}
 		}
 	}
+	
+	// Adds in the created solids based upon the AlterTab
+	public static void addGeneratedSolidsAndGroups() {
+		if (VMFObjectCreator.outputBrushesAndGroups.size() != 0) {
+			lines.addAll(VMFObjectCreator.outputBrushesAndGroups);
+			VMFObjectCreator.outputBrushesAndGroups.clear();
+		}
+	}
+	
+	// Adds in the created groups/entities based upon the AlterTab
+	public static void addGeneratedEntities() {
+		if (VMFObjectCreator.outputEntities.size() != 0) {
+			lines.addAll(VMFObjectCreator.outputEntities);
+			VMFObjectCreator.outputEntities.clear();
+		}
+	}
+	
+	// Generates unique id, since all ids in a vmf must be unique
+		public static int generateUniqueId() {
+			id++;
+			while (groupIds.contains(id)) {
+				id++;
+			}
+			return id;
+		}
 	
 	// Output button
 //	private static void output() {
@@ -172,13 +209,4 @@ public class Internalize {
 //			Internalize.log.append(Integer.toString(entityIndex) + '\n');
 //		}
 //	}
-	
-	// Generates unique id, since all ids in a vmf must be unique
-	public static int generateUniqueId() {
-		id++;
-		while (groupIds.contains(id)) {
-			id++;
-		}
-		return id;
-	}
 }
