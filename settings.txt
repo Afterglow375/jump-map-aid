@@ -1,0 +1,9 @@
+WARNING: ALTERING THIS FILE IN ANY WAY MAY MAKE THE APP FAIL
+C:\Program Files (x86)\Steam\steamapps\afterglow375\sourcesdk_content\tf\mapsrc
+jump_
+metal/metalfence007a
+glass/combineglass001a
+dev/reflectivity_50
+1
+dev/dev_blendmeasure
+1

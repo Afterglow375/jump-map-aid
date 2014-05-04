@@ -99,6 +99,7 @@ public class MainWindow implements ActionListener {
 		}
 	}
 	
+	// Event handler for buttons
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == settings) { // Write settings to memory
 			save();
