@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 import afterglow.mapping.Toast.Style;
 
@@ -23,11 +24,18 @@ public class MainWindow implements ActionListener {
 	private JFrame frmJumpMapAid;
 	private JButton output, merge, settings;
 	public static String vmfDirectory, vmfName;
+	public static final String FONT = "Century Gothic";
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+	    try {
+	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    } catch(Exception e) {
+	        System.out.println("Error setting native LAF: " + e);
+	    }
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -52,36 +60,38 @@ public class MainWindow implements ActionListener {
 	 */
 	private void initialize() {
 		frmJumpMapAid = new JFrame();
-		frmJumpMapAid.getContentPane().setFont(new Font("Century Gothic", Font.PLAIN, 13));
-		frmJumpMapAid.setFont(new Font("Century Gothic", Font.PLAIN, 13));
+		frmJumpMapAid.getContentPane().setFont(new Font(FONT, Font.PLAIN, 13));
+		frmJumpMapAid.setFont(new Font(FONT, Font.PLAIN, 13));
 		frmJumpMapAid.getContentPane().setForeground(new Color(0, 0, 0));
 		frmJumpMapAid.getContentPane().setBackground(new Color(240, 248, 255));
 		frmJumpMapAid.getContentPane().setLayout(null);
+		frmJumpMapAid.setResizable(false);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 0, 672, 464);
 		
+		// Adding tabs here
 		frmJumpMapAid.getContentPane().add(tabbedPane);
 		tabbedPane.addTab("General", new GeneralTab());
 		tabbedPane.addTab("Alter", new AlterTab());
 		
 		settings = new JButton("Save Settings");
 		settings.setToolTipText("Saves the current settings");
-		settings.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		settings.setFont(new Font(FONT, Font.PLAIN, 16));
 		settings.setBounds(10, 475, 214, 37);
 		settings.addActionListener(this);
 		frmJumpMapAid.getContentPane().add(settings);
 		
 		output = new JButton("Output");
 		output.setToolTipText("Outputs a new vmf with the given settings to <input>_output.vmf");
-		output.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		output.setFont(new Font(FONT, Font.PLAIN, 16));
 		output.setBounds(239, 475, 214, 37);
 		output.addActionListener(this);
 		frmJumpMapAid.getContentPane().add(output);
 		
 	    merge = new JButton("Merge");
 		merge.setToolTipText("Merges changes into original vmf");
-		merge.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		merge.setFont(new Font(FONT, Font.PLAIN, 16));
 		merge.setBounds(468, 475, 214, 37);
 		merge.addActionListener(this);
 		frmJumpMapAid.getContentPane().add(merge);
