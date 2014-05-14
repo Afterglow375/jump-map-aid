@@ -21,62 +21,62 @@ public class AlterTab extends JPanel {
 	public AlterTab() {
 		JLabel label1 = new JLabel("Player clip and func_illusionary:");
 		label1.setBounds(30, 88, 238, 21);
-		label1.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		label1.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		
 		playerClipText = new JTextField();
 		playerClipText.setBounds(273, 85, 363, 27);
 		playerClipText.setText("metal/metalfence007a");
-		playerClipText.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		playerClipText.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		playerClipText.setColumns(10);
 		
 		triggerTeleportHeight = new JTextField();
 		triggerTeleportHeight.setBounds(91, 222, 51, 27);
 		triggerTeleportHeight.setHorizontalAlignment(SwingConstants.LEFT);
 		triggerTeleportHeight.setText("1");
-		triggerTeleportHeight.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		triggerTeleportHeight.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		triggerTeleportHeight.setColumns(10);
 		
 		JLabel label2 = new JLabel("Height:");
 		label2.setBounds(30, 225, 56, 21);
-		label2.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		label2.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		
 		JLabel desc = new JLabel("Specify the textures for which brushes you want to alter.");
 		desc.setBounds(30, 21, 433, 21);
-		desc.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		desc.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(8, 60, 650, 15);
 		
 		JLabel label = new JLabel("trigger_teleport:");
 		label.setBounds(30, 192, 127, 21);
-		label.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		label.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		
 		triggerTeleportText = new JTextField();
 		triggerTeleportText.setBounds(162, 189, 474, 27);
 		triggerTeleportText.setText("dev/reflectivity_50");
-		triggerTeleportText.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		triggerTeleportText.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		triggerTeleportText.setColumns(10);
 		
 		JLabel lblFuncnogrenades = new JLabel("func_nogrenades:");
 		lblFuncnogrenades.setBounds(30, 277, 141, 21);
-		lblFuncnogrenades.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		lblFuncnogrenades.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		
 		noGrenadesText = new JTextField();
 		noGrenadesText.setBounds(176, 274, 460, 27);
 		noGrenadesText.setText("dev/dev_blendmeasure");
-		noGrenadesText.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		noGrenadesText.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		noGrenadesText.setColumns(10);
 		
 		noGrenadesHeight = new JTextField();
 		noGrenadesHeight.setBounds(91, 307, 51, 27);
 		noGrenadesHeight.setText("1");
 		noGrenadesHeight.setHorizontalAlignment(SwingConstants.LEFT);
-		noGrenadesHeight.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		noGrenadesHeight.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		noGrenadesHeight.setColumns(10);
 		
 		JLabel label_2 = new JLabel("Height:");
 		label_2.setBounds(30, 310, 56, 21);
-		label_2.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		label_2.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		setLayout(null);
 		add(separator);
 		add(label2);
@@ -92,13 +92,13 @@ public class AlterTab extends JPanel {
 		add(desc);
 		
 		JLabel lblFuncbrush = new JLabel("func_brush:");
-		lblFuncbrush.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		lblFuncbrush.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		lblFuncbrush.setBounds(30, 140, 89, 21);
 		add(lblFuncbrush);
 		
 		brushText = new JTextField();
 		brushText.setText("glass/combineglass001a");
-		brushText.setFont(new Font("Century Gothic", Font.PLAIN, 16));
+		brushText.setFont(new Font(MainWindow.FONT, Font.PLAIN, 16));
 		brushText.setColumns(10);
 		brushText.setBounds(124, 137, 512, 27);
 		add(brushText);

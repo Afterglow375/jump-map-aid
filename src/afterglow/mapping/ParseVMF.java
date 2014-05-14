@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class Internalize {
+public class ParseVMF {
 	private static final String SEPARATOR = "==============================================================================================";
 	private static JFrame frame;
 	private static String pathText, vmfText;
@@ -52,8 +52,16 @@ public class Internalize {
 			MainWindow.popupBox("There is no " + vmfText + ".vmf at the given filepath.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		else {
-			parseAndOutput();
+			parseVMF();
 		}
+	}
+	
+	public static void parseVMF() {
+		log.setText("");
+		frame.setVisible(true);
+		log.append("Reading from " + dir.toString() + '\n');
+		log.append(SEPARATOR + '\n');
+		ArrayList<String> initialLines = new ArrayList<String>(29);
 	}
 	
 	public static void parseAndOutput() {
@@ -62,7 +70,7 @@ public class Internalize {
 		log.append("Reading from " + dir.toString() + '\n');
 		log.append(SEPARATOR + '\n');
 		lines = new ArrayList<String>();
-		brush = new ArrayList<String>(25);
+		brush = new ArrayList<String>(80);
 		groupIds = new ArrayList<Integer>();
 		sideIndices = new ArrayList<Integer>();
 		String[] splitLine;
@@ -242,12 +250,12 @@ public class Internalize {
 	// Output button
 //	private static void output() {
 //		
-//		for (int entityIndex : Internalize.ids) {
-//			Internalize.log.append(Integer.toString(entityIndex) + '\n');
+//		for (int entityIndex : ParseVMF.ids) {
+//			ParseVMF.log.append(Integer.toString(entityIndex) + '\n');
 //		}
-//		Internalize.log.append(Integer.toString(Internalize.generateUniqueId(7)) + '\n');
-//		for (int entityIndex : Internalize.ids) {
-//			Internalize.log.append(Integer.toString(entityIndex) + '\n');
+//		ParseVMF.log.append(Integer.toString(ParseVMF.generateUniqueId(7)) + '\n');
+//		for (int entityIndex : ParseVMF.ids) {
+//			ParseVMF.log.append(Integer.toString(entityIndex) + '\n');
 //		}
 //	}
 }

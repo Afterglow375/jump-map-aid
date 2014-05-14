@@ -79,7 +79,7 @@ public class VMFObjectCreator {
 	}
 	
 	private int createGroup() {
-		int id = Internalize.generateUniqueId();
+		int id = ParseVMF.generateUniqueId();
 		String group =
 		"\tgroup\n"
 		+ "\t{\n"
@@ -99,7 +99,7 @@ public class VMFObjectCreator {
 		String teleport = 
 		"entity\n"
 		+ "{\n"
-		+ "\t\"id\" \"" + Internalize.generateUniqueId() + "\"\n"
+		+ "\t\"id\" \"" + ParseVMF.generateUniqueId() + "\"\n"
 		+ "\t\"classname\" \"trigger_teleport\"\n"
 		+ "\t\"origin\" \"" + computeOrigin() + "\"\n"
 		+ "\t\"spawnflags\" \"1\"\n"
@@ -111,7 +111,7 @@ public class VMFObjectCreator {
 		String illusionary = 
 		"entity\n"
 		+ "{\n"
-		+ "\t\"id\" \"" + Internalize.generateUniqueId() + "\"\n"
+		+ "\t\"id\" \"" + ParseVMF.generateUniqueId() + "\"\n"
 		+ "\t\"classname\" \"func_illusionary\"\n"
 		+ "\t\"disablereceiveshadows\" \"0\"\n"
 		+ "\t\"disableshadows\" \"0\"\n"
@@ -128,12 +128,12 @@ public class VMFObjectCreator {
 			}
 			else if (line.contains("\t\t\"id\"")) {
 				if (line.contains("\t\t\t")) {
-					illusionary += "\t\t\t\"id\" \"" + Internalize.generateUniqueId() + "\"\n";
-					playerClip += "\t\t\t\"id\" \"" + Internalize.generateUniqueId() + "\"\n";
+					illusionary += "\t\t\t\"id\" \"" + ParseVMF.generateUniqueId() + "\"\n";
+					playerClip += "\t\t\t\"id\" \"" + ParseVMF.generateUniqueId() + "\"\n";
 				}
 				else {
-					illusionary += "\t\t\"id\" \"" + Internalize.generateUniqueId() + "\"\n";
-					playerClip += "\t\t\"id\" \"" + Internalize.generateUniqueId() + "\"\n";
+					illusionary += "\t\t\"id\" \"" + ParseVMF.generateUniqueId() + "\"\n";
+					playerClip += "\t\t\"id\" \"" + ParseVMF.generateUniqueId() + "\"\n";
 				}
 			}
 			else if (line.contains("\"visgroupshown\"")) {
@@ -165,7 +165,7 @@ public class VMFObjectCreator {
 		String funcBrush = 
 		"entity\n"
 		+ "{\n"
-		+ "\t\"id\" \"" + Internalize.generateUniqueId() + "\"\n"
+		+ "\t\"id\" \"" + ParseVMF.generateUniqueId() + "\"\n"
 		+ "\t\"classname\" \"func_brush\"\n"
 		+ "\t\"disablereceiveshadows\" \"0\"\n"
 		+ "\t\"disableshadows\" \"0\"\n"
