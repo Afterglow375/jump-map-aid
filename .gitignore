@@ -1,7 +1,3 @@
-# Eclipse project files
-.classpath
-.project
-
 # generated files
 bin/
 gen/
